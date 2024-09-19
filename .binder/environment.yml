@@ -37,11 +37,11 @@ dependencies:
   # Plotting
   - matplotlib=3.7
 
-  # PIP
-  - pip=22.2.2
-  - pip:
-    - gmsh==4.11
-    - meshio==5.3
-    - git+https://gitlab.inria.fr/mgenet/dolfin_mech.git@main  # Link to the dolfin_mech repository
-    - git+https://github.com/ManoochTayebi/micro_poro_structure_generator.git@main  # Link to the micro_poro_structure_generator repository
+  # # PIP
+  # - pip=22.2.2
+  # - pip:
+  #   - gmsh==4.11
+  #   - meshio==5.3
+  #   - git+https://gitlab.inria.fr/mgenet/dolfin_mech.git@main  # Link to the dolfin_mech repository
+  #   - git+https://github.com/ManoochTayebi/micro_poro_structure_generator.git@main  # Link to the micro_poro_structure_generator repository
 
