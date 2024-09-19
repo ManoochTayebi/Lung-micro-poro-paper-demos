@@ -1,10 +1,12 @@
-name: Build Jupyter Book
+name: Build and Test
 
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -16,16 +18,31 @@ jobs:
     - name: Set up Miniconda
       uses: conda-incubator/setup-miniconda@v2
       with:
-        python-version: 3.10
-        activate-environment: notebook
-        environment-file: .binder/environment.yml
+        python-version: 3.10  # Match the Python version in environment.yml
         auto-update-conda: true
 
-    - name: Debug Conda Environment
+    - name: Debug Conda Environment Setup
       run: |
+        echo "Conda info:"
         conda info
+        
+        echo "Conda list:"
         conda list
 
+    - name: Create Conda environment
+      run: |
+        conda env create -f .binder/environment.yml
+        
+        # List environments to confirm creation
+        echo "Conda environments:"
+        conda env list
+        
+        # Activate the environment to confirm it works
+        source activate notebook
+        
+        echo "Installed packages in the environment:"
+        conda list
+        
     - name: Install Jupyter Book
       run: pip install jupyter-book
 
