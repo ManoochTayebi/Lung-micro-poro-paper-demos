@@ -37,6 +37,9 @@ dependencies:
 # plotting stuff
   - matplotlib=3.7
 
+# geometry processing (Shapely)
+  - shapely=2.0 
+
   - pip=22.2.2
   - pip:
   # computing stuff
