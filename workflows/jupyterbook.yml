@@ -137,7 +137,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}  # Username from GitHub context
-          password: ${{ secrets.GITHUB_TOKEN }}  # GitHub token with write access to GHCR
+          password: ${{ secrets.GHCR_TOKEN }}  # GitHub token with write access to GHCR
 
       # Build Docker image
       - name: Build Docker image
