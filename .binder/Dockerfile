@@ -8,7 +8,7 @@
 
 
 # Pull the base Docker image from GitHub Container Registry
-FROM ghcr.io/manoochtayebi/Lung-micro-poro-paper-demos:latest
+FROM ghcr.io/manoochtayebi/lung-micro-poro-paper-demos:latest
 
 # Set user configurations if needed
 ARG NB_USER=jovyan
