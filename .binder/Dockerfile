@@ -55,4 +55,4 @@ WORKDIR /app
 ENTRYPOINT ["/root/miniconda3/bin/conda", "run", "-n", "notebook", "--no-capture-output"]
 
 # Step 12: Define the default command (this is an example command)
-CMD ["python3", "app.py"]
+ENTRYPOINT ["jupyter", "notebook", "--ip=0.0.0.0", "--allow-root"]
