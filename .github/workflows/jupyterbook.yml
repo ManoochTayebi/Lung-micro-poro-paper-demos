@@ -50,7 +50,8 @@ jobs:
           conda env list
           
           # Activate the environment to confirm it works
-          source activate notebook
+          source /usr/share/miniconda/etc/profile.d/conda.sh
+          conda activate notebook
           
           echo "Installed packages in the environment:"
           conda list
