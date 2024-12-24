@@ -71,6 +71,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_build/html
 
+
+
+
   build_docker_image:
     runs-on: ubuntu-latest
     permissions:
@@ -107,52 +110,3 @@ jobs:
       # Push Docker image to GHCR
       - name: Push Docker Image to GHCR
         run: docker push ghcr.io/manoochtayebi/lung-micro-poro-paper-demos:latest
-
-
-
-# name: Build and Push Docker Image to GHCR
-
-# on:
-#   push:
-#     branches:
-#       - master
-
-# jobs:
-#   build_and_push:
-#     runs-on: ubuntu-latest
-#     permissions:
-#       contents: read  # To access repository contents
-#       packages: write  # To push to GHCR
-
-#     steps:
-#       # Step 1: Checkout the code
-#       - name: Checkout repository
-#         uses: actions/checkout@v2
-
-#       # Step 2: Set up Docker
-#       - name: Set up Docker
-#         run: |
-#           sudo apt-get update
-#           sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
-#           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-#           echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-#           sudo apt-get update
-#           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-#       # Step 3: Log in to GitHub Container Registry (GHCR)
-#       - name: Log in to GHCR
-#         uses: docker/login-action@v2
-#         with:
-#           registry: ghcr.io
-#           username: ${{ github.actor }}
-#           password: ${{ secrets.GHCR_TOKEN }}  # Make sure GHCR_TOKEN is set in GitHub Secrets
-
-#       # Step 4: Build Docker image
-#       - name: Build Docker Image
-#         run: |
-#           docker build -f .binder/Dockerfile -t ghcr.io/manoochtayebi/lung-micro-poro-paper-demos:latest .
-
-#       # Step 5: Push Docker image to GHCR
-#       - name: Push Docker Image to GHCR
-#         run: |
-#           docker push ghcr.io/manoochtayebi/lung-micro-poro-paper-demos:latest

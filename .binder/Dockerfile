@@ -41,4 +41,4 @@ EXPOSE 8000
 WORKDIR /app
 
 # Step 9: Define the default command
-CMD ["python3", "app.py"]
+# CMD ["python3", "app.py"]
