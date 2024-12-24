@@ -101,8 +101,8 @@ jobs:
 
       # Build Docker image using Dockerfile in `.binder`
       - name: Build Docker Image
-        run: docker build -f .binder/Dockerfile -t ghcr.io/${{ github.repository }}:latest .
+        run: docker build -f .binder/Dockerfile -t ghcr.io/${{ github.repository_owner | toLowerCase }}/lung-micro-poro-paper-demos:latest .
 
       # Push Docker image to GHCR
       - name: Push Docker Image to GHCR
-        run: docker push ghcr.io/${{ github.repository }}:latest
+        run: docker push ghcr.io/${{ github.repository_owner | toLowerCase }}/lung-micro-poro-paper-demos:latest
