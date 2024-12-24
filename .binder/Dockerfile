@@ -34,8 +34,9 @@ RUN curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64
     && rm miniconda.sh \
     && /root/miniconda3/bin/conda init bash
 
-# Step 6: Remove any pre-existing notebook environment
+# Step 6: Clean up and remove any pre-existing 'notebook' environment
 RUN /root/miniconda3/bin/conda env remove -n notebook || echo "No existing environment to remove"
+RUN /root/miniconda3/bin/conda clean --all -y
 
 # Step 7: Copy the environment.yml file to the container
 COPY .repo2docker/environment.yml /tmp/environment.yml
