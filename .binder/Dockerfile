@@ -28,17 +28,28 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# Step 5: Copy the application code to the container (optional)
-# COPY . /app
+# Step 5: Install Conda (if not already present in the base image)
+# If Conda is not available in the base image, you can install Miniconda here
+RUN curl -sSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o miniconda.sh \
+    && bash miniconda.sh -b -u \
+    && rm miniconda.sh \
+    && /root/miniconda3/bin/conda init bash
 
-# Step 6: Install Python dependencies (optional, if you have a requirements.txt)
-# RUN pip3 install --no-cache-dir -r /app/requirements.txt
+# Step 6: Copy the environment.yml file to the container
+COPY .repo2docker/environment.yml /tmp/environment.yml
 
-# Step 7: Expose a port (e.g., if you're running a web app)
+# Step 7: Create Conda environment from environment.yml
+RUN /root/miniconda3/bin/conda env create -f /tmp/environment.yml
+
+# Step 8: Expose a port (e.g., if you're running a web app)
 EXPOSE 8000
 
-# Step 8: Set the working directory
+# Step 9: Set the working directory
 WORKDIR /app
 
-# Step 9: Define the default command
-# CMD ["python3", "app.py"]
+# Step 10: Set up environment activation (optional)
+# If you want to automatically activate the environment, use the entrypoint or CMD
+ENTRYPOINT ["/root/miniconda3/bin/conda", "run", "-n", "notebook", "--no-capture-output"]
+
+# Step 11: Define the default command (this is an example command)
+CMD ["python3", "app.py"]
