@@ -28,7 +28,7 @@ jobs:
       - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: 3.11  # Match the Python version in environment.yml
+          python-version: 3.10  # Match the Python version in environment.yml
           auto-update-conda: true
 
       # Debug Conda Environment Setup
