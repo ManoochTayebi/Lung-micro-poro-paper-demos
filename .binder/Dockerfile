@@ -1,10 +1,10 @@
-# ################################################################################
-# ###                                                                          ###
-# ### Created by Mahdi Manoochehrtayebi                                        ###
-# ###                                                                          ###
-# ### École Polytechnique, Palaiseau, France                                   ###
-# ###                                                                          ###
-# ################################################################################
+################################################################################
+###                                                                          ###
+### Created by Martin Genet                                                  ###
+###                                                                          ###
+### École Polytechnique, Palaiseau, France                                   ###
+###                                                                          ###
+################################################################################
 
 # Step 1: Use your custom image from GHCR as the base image
 FROM ghcr.io/manoochtayebi/lung-micro-poro-paper-demos:latest
