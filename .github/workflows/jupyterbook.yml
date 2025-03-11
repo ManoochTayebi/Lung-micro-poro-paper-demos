@@ -61,6 +61,10 @@ jobs:
           echo "Installed packages in the environment:"
           conda list
           
+      # Install Jupyter Book & nbconvert
+      - name: Install Jupyter Book & nbconvert
+        run: pip install jupyter-book nbconvert
+
       # Install Jupyter Book
       - name: Install Jupyter Book
         run: pip install jupyter-book
@@ -69,6 +73,14 @@ jobs:
       - name: Build Jupyter Book
         run: jupyter-book build .
 
+      # Convert Notebooks to HTML
+      - name: Convert Jupyter Notebooks to HTML
+        run: |
+          mkdir -p notebooks_html
+          for notebook in $(find . -name "*.ipynb"); do
+            jupyter nbconvert --to html "$notebook" --output-dir notebooks_html
+          done
+
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -76,6 +88,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_build/html
 
+      # Deploy Notebooks HTML to GitHub Pages
+      - name: Deploy Notebooks HTML to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./notebooks_html
+          destination_dir: notebooks
 
   build_docker_image:
     runs-on: ubuntu-20.04
