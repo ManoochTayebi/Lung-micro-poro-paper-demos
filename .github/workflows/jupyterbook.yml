@@ -77,9 +77,7 @@ jobs:
       - name: Convert Jupyter Notebooks to HTML
         run: |
           mkdir -p notebooks_html
-          for notebook in $(find . -name "*.ipynb"); do
-            jupyter nbconvert --to html "$notebook" --output-dir notebooks_html
-          done
+          find demos -name "*.ipynb" ! -name "* copy.ipynb" ! -name "*~" ! -name ".*" -exec jupyter nbconvert --to html --output-dir notebooks_html {} \;
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
