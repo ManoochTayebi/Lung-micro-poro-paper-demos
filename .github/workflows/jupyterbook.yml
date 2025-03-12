@@ -92,7 +92,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./notebooks_html
-          destination_dir: notebooks
+          destination_dir: docs/notebooks
+          keep_files: true
 
   build_docker_image:
     runs-on: ubuntu-20.04
