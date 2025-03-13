@@ -5,11 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lung Micro-Poro Paper Demos</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        h1 { color: #333; }
-        .container { max-width: 800px; margin: auto; text-align: center; }
-        .notebook-list { list-style: none; padding: 0; }
-        .notebook-list li { margin: 10px 0; }
+        /* General Page Styling */
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            display: flex; 
+            height: 100vh; 
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            border-right: 2px solid #ddd;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            max-width: 150px;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 18px;
+            color: #0056b3;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #007BFF;
+            padding: 8px;
+            margin: 5px 0;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        p {
+            color: #555;
+        }
+
         .button {
             display: inline-block;
             padding: 10px 20px;
@@ -19,36 +81,37 @@
             border-radius: 5px;
             margin-top: 10px;
         }
-        .button:hover { background: #0056b3; }
-        .logo {
-            display: block;
-            margin: 0 auto 20px auto;
-            max-width: 150px;
+
+        .button:hover {
+            background: #0056b3;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Logo -->
+    <!-- Sidebar -->
+    <div class="sidebar">
         <img src="./logo.png" alt="Project Logo" class="logo">
+        <h2>Welcome</h2>
+        <a href="#">Home</a>
+        <a href="./notebooks/Figure6.html">Figure 6</a>
+        <a href="./notebooks/Figure7.html">Figure 7</a>
+        <a href="./notebooks/Figure8.html">Figure 8</a>
+        <a href="./notebooks/Figures9&10.html">Figures 9 & 10</a>
+        <a href="./notebooks/Figure11.html">Figure 11</a>
+    </div>
 
-        <h1>Lung Micro-Poro Paper Demos</h1>
-        <p>Welcome! Explore the interactive notebooks or launch them in Binder.</p>
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container">
+            <h1>Lung Micro-Poro Paper Demos</h1>
+            <p>Welcome! Explore the interactive notebooks or launch them in Binder.</p>
 
-        <!-- Launch Binder Button -->
-        <a href="https://mybinder.org/v2/gh/manoochtayebi/Lung-micro-poro-paper-demos/HEAD?labpath=notebooks" class="button">
-            🚀 Launch in Binder
-        </a>
-
-        <h2>Static Notebooks</h2>
-        <ul class="notebook-list">
-            <li><a href="./notebooks/Figure6.html">Figure 6 simulation</a></li>
-            <li><a href="./notebooks/Figure7.html">Figure 7 Analysis</a></li>
-            <li><a href="./notebooks/Figure8.html">Figure 8 Results</a></li>
-            <li><a href="./notebooks/Figure9&10.html">Figures 9 & 10</a></li>
-            <li><a href="./notebooks/Figure11.html">Figure 11</a></li>
-        </ul>
+            <!-- Launch Binder Button -->
+            <a href="https://mybinder.org/v2/gh/manoochtayebi/Lung-micro-poro-paper-demos/HEAD?labpath=notebooks" class="button">
+                🚀 Launch in Binder
+            </a>
+        </div>
     </div>
 
 </body>
