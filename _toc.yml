@@ -7,6 +7,5 @@ chapters:
 - file: demos/Fig5
 - file: demos/Fig6
 - file: demos/Fig7
-- file: demos/Fig8
-- file: demos/Fig9&10
-- file: demos/Fig11
+- file: demos/Fig8&9
+- file: demos/Fig10
