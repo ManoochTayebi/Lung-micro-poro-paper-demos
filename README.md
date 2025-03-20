@@ -1,4 +1,4 @@
-# Welcome to [Manoochehrtayebi, Bel-Brunon & Genet, Submitted]'s demos!
+# Welcome to [Manoochehrtayebi, Genet & Bel-Brunon, Submitted]'s demos!
 
 The static notebooks be found at https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/.
 
