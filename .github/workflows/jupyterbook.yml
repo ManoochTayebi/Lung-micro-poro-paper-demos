@@ -71,21 +71,13 @@ jobs:
           mkdir -p notebooks_html
           find demos -name "*.ipynb" ! -name "* copy.ipynb" ! -name "*~" ! -name ".*" -exec jupyter nbconvert --to html --output-dir notebooks_html {} \;
 
-      # Deploy to GitHub Pages
+      # Deploy everything (index.html + notebooks) to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
-
-      # Deploy Notebooks HTML to GitHub Pages
-      - name: Deploy Notebooks HTML to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./notebooks_html
-          destination_dir: docs/notebooks
-          keep_files: true
+          keep_files: true  # Ensures notebooks & main page are not overwritten
 
   build_docker_image:
     runs-on: ubuntu-20.04
