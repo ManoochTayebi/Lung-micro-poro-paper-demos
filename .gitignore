@@ -8,6 +8,7 @@ Fig5-hexagonal-seeds.dat
 *.out
 *.pdf
 *.sta
+*.tif
 *.vtk
 *.xdmf
 *.xml
