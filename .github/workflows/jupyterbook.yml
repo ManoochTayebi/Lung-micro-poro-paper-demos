@@ -80,7 +80,7 @@ jobs:
           keep_files: true  # Ensures notebooks & main page are not overwritten
 
   build_docker_image:
-      if: false
+      if: True
 
       runs-on: ubuntu-20.04
       permissions:
