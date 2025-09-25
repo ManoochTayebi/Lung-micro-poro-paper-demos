@@ -136,8 +136,8 @@ jobs:
       # Build the Docker image using repo2docker
       - name: Build Docker image
         run: repo2docker --no-run --user-id 1000 --user-name jovyan --image-name ghcr.io/$REPO_NAME .repo2docker
-        # env:
-        #   DOCKER_BUILDKIT: 0
+        env:
+          DOCKER_BUILDKIT: 0
 
       # Tag the Docker image
       - name: Tag Docker image
