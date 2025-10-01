@@ -135,17 +135,32 @@ jobs:
 
       # Build the Docker image using repo2docker
       - name: Build Docker image
-        run: repo2docker --no-run --user-id 1000 --user-name jovyan --image-name ghcr.io/$REPO_NAME .repo2docker
+        run: |
+          echo "Starting repo2docker build..."
+          export DOCKER_BUILDKIT=0
+          repo2docker --no-run --user-id 1000 --user-name jovyan --image-name ghcr.io/$REPO_NAME .repo2docker
+          echo "repo2docker build completed with exit code: $?"
         env:
           DOCKER_BUILDKIT: 0
 
       # List Docker images after build (for debugging)
       - name: List Docker images after build
-        run: docker images
+        run: |
+          echo "Listing all Docker images:"
+          docker images
+          echo "Checking for our specific image:"
+          docker images ghcr.io/$REPO_NAME || echo "Image ghcr.io/$REPO_NAME not found!"
 
       # Tag the Docker image
       - name: Tag Docker image
-        run: docker image tag ghcr.io/$REPO_NAME ghcr.io/$REPO_NAME:${{ github.sha }}
+        run: |
+          if docker images ghcr.io/$REPO_NAME --format "{{.Repository}}" | grep -q ghcr.io/$REPO_NAME; then
+            echo "Image found, proceeding with tagging..."
+            docker image tag ghcr.io/$REPO_NAME ghcr.io/$REPO_NAME:${{ github.sha }}
+          else
+            echo "ERROR: Image ghcr.io/$REPO_NAME not found! Build must have failed."
+            exit 1
+          fi
 
       # Login to GHCR
       - name: Log in to GHCR
