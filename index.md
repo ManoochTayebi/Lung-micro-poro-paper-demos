@@ -1,6 +1,5 @@
 # Welcome to [Manoochehrtayebi, Genet & Bel-Brunon, Submitted]'s demos!
 
-## 🚀 Run Interactive Demos
 
 Demos can be browsed statically but also interactively—to start a session and run the code just click on the rocket icon at the top of a tutorial page and then click on “Binder”. You can also launch a JupyterLab session:
 
