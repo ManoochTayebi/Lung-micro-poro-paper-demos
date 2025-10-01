@@ -94,12 +94,15 @@ jobs:
           echo "Creating docs directory and copying files..."
           rm -rf docs
           cp -r _build/html docs
-          # Copy notebooks_html to docs
+          # Copy notebooks_html to docs/notebooks subdirectory (not root)
           if [ -d "notebooks_html" ]; then
-            cp -r notebooks_html/* docs/
+            mkdir -p docs/notebooks
+            cp -r notebooks_html/* docs/notebooks/
           fi
           echo "Contents of docs directory:"
           ls -la docs/
+          echo "Contents of docs/notebooks directory:"
+          ls -la docs/notebooks/ || echo "No notebooks directory"
 
       # Deploy everything (index.html + notebooks) to GitHub Pages
       - name: Deploy to GitHub Pages
