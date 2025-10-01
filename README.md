@@ -8,11 +8,8 @@ Interactive demos can be found at https://mybinder.org/v2/gh/ManoochTayebi/Lung-
 
 <!-- Or click this [link](https://mybinder.org/v2/gh/ManoochTayebi/Lung-micro-poro-paper-demos/HEAD) to open Binder. -->
 
-## Direct Links
+## Individual Notebooks:
 
-**Main Jupyter Book:** https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/
-
-**Individual Notebooks:**
 - [Figure 6](https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/notebooks/Figure6.html)
 - [Figure 7](https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/notebooks/Figure7.html)
 - [Figure 8](https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/notebooks/Figure8.html)
