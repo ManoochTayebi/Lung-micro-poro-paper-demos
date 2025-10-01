@@ -1,0 +1,236 @@
+################################################################################
+###                                                                          ###
+### Created by Mahdi Manoochehrtayebi                                        ###
+###                                                                          ###
+### École Polytechnique, Palaiseau, France                                   ###
+###                                                                          ###
+################################################################################
+
+name: Build, Test, and Publish
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  # workflow_dispatch:
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Miniconda
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: 3.10.12  # Match the Python version in environment.yml
+          auto-update-conda: true
+
+      # Debug Conda Environment Setup
+      - name: Debug Conda Environment Setup
+        run: |
+          echo "Conda info:"
+          conda info
+
+          echo "Conda list:"
+          conda list
+
+      # Create Conda environment
+      - name: Create Conda environment
+        run: |
+          conda env create -f .repo2docker/environment.yml
+          
+          # List environments to confirm creation
+          echo "Conda environments:"
+          conda env list
+          
+          # Activate the environment to confirm it works
+          source /usr/share/miniconda/etc/profile.d/conda.sh
+          conda activate notebook
+          
+          echo "Installed packages in the environment:"
+          conda list
+          
+      # Install Jupyter Book & nbconvert
+      - name: Install Jupyter Book & nbconvert
+        run: pip install jupyter-book nbconvert
+
+      # Build Jupyter Book
+      - name: Build Jupyter Book
+        run: jupyter-book build .
+
+      # Copy static files (PDFs, images) to the output directory
+      - name: Copy static files to docs
+        run: |
+          echo "Copying static files..."
+          # Copy PDF files
+          find demos -name "*.pdf" -exec cp {} _build/html/ \;
+          # Copy image files
+          find demos -name "*.png" -exec cp {} _build/html/ \;
+          find demos -name "*.jpg" -exec cp {} _build/html/ \;
+          find demos -name "*.jpeg" -exec cp {} _build/html/ \;
+          find demos -name "*.tif" -exec cp {} _build/html/ \;
+          find demos -name "*.tiff" -exec cp {} _build/html/ \;
+          # List what was copied
+          echo "Static files in _build/html:"
+          ls -la _build/html/*.{pdf,png,jpg,jpeg,tif,tiff} 2>/dev/null || echo "No static files found"
+
+      # Convert Notebooks to HTML
+      - name: Convert Jupyter Notebooks to HTML
+        run: |
+          mkdir -p notebooks_html
+          find demos -name "*.ipynb" ! -name "* copy.ipynb" ! -name "*~" ! -name ".*" -exec jupyter nbconvert --to html --output-dir notebooks_html {} \;
+
+      # Copy everything to docs directory for GitHub Pages
+      - name: Copy build to docs directory
+        run: |
+          echo "Creating docs directory and copying files..."
+          rm -rf docs
+          cp -r _build/html docs
+          # Copy notebooks_html to docs
+          if [ -d "notebooks_html" ]; then
+            cp -r notebooks_html/* docs/
+          fi
+          echo "Contents of docs directory:"
+          ls -la docs/
+
+      # Deploy everything (index.html + notebooks) to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          keep_files: false  # Ensure fresh deployment
+
+  # Commented out Docker build job for testing
+  # build_docker_image:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #       contents: read
+  #       packages: write
+  #   steps:
+  #     # Checkout the repository
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #
+  #     # Set up Docker Buildx (for advanced Docker features) - DISABLED for compatibility
+  #     # - name: Set up Docker Buildx
+  #     #   uses: docker/setup-buildx-action@v2
+  #
+  #     # Install dependencies
+  #     - name: Install dependencies
+  #       run: |
+  #         sudo apt update
+  #         sudo apt install -y python3 python3-pip mercurial git ca-certificates curl gnupg lsb-release
+  #
+  #     # Set up Docker repository
+  #     - name: Setup Docker repository
+  #       run: |
+  #         curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+  #         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  #         sudo DEBIAN_FRONTEND=noninteractive apt install -y tzdata
+  #         sudo apt update
+  #         sudo apt install -y docker-ce docker-ce-cli containerd.io
+  #
+  #
+  #     # Convert repository name to lowercase
+  #     - name: Convert repository name to lowercase
+  #       id: repo_name_lowercase
+  #       run: |
+  #         echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
+  #         echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+  #         echo $REPO_NAME
+  #         cat $GITHUB_ENV
+  #
+  #     # Display Docker images
+  #     - name: Show Docker images
+  #       run: docker images
+  #
+  #     # Remove existing images (if any)
+  #     - name: Remove existing images
+  #       run: |
+  #         docker rmi -f ghcr.io/$REPO_NAME || true
+  #         docker images --filter="reference=ghcr.io/$REPO_NAME" --format="{{.Repository}}:{{.Tag}}" | xargs docker rmi || true
+  #         docker image prune -f
+  #
+  #     # Install jupyter-repo2docker
+  #     - name: Install jupyter-repo2docker
+  #       run: |
+  #         echo "Installing repo2docker..."
+  #         python3 -m pip install jupyter-repo2docker
+  #         echo "repo2docker version:"
+  #         repo2docker --version
+  #         echo "Docker version:"
+  #         docker version
+  #
+  #     # Test with simplified environment first
+  #     - name: Test simplified environment
+  #       run: |
+  #         echo "Testing if conda can resolve the simplified environment..."
+  #         conda env create -f .repo2docker/environment-test.yml -n test-simple || echo "Simplified environment failed"
+  #         conda env list
+  #
+  #     # Build the Docker image using repo2docker
+  #     - name: Build Docker image
+  #       run: |
+  #         echo "Starting repo2docker build..."
+  #         echo "Current directory: $(pwd)"
+  #         echo "Contents of .repo2docker directory:"
+  #         ls -la .repo2docker/
+  #         echo "Environment variables:"
+  #         echo "REPO_NAME=$REPO_NAME"
+  #         echo "DOCKER_BUILDKIT=$DOCKER_BUILDKIT"
+  #         export DOCKER_BUILDKIT=0
+  #         echo "Running repo2docker with debug output..."
+  #         repo2docker --debug --no-run --user-id 1000 --user-name jovyan --image-name ghcr.io/$REPO_NAME .repo2docker
+  #         BUILD_EXIT_CODE=$?
+  #         echo "repo2docker build completed with exit code: $BUILD_EXIT_CODE"
+  #         if [ $BUILD_EXIT_CODE -ne 0 ]; then
+  #           echo "Build failed! Exit code: $BUILD_EXIT_CODE"
+  #           exit $BUILD_EXIT_CODE
+  #         fi
+  #       env:
+  #         DOCKER_BUILDKIT: 0
+  #
+  #     # List Docker images after build (for debugging)
+  #     - name: List Docker images after build
+  #       run: |
+  #         echo "Listing all Docker images:"
+  #         docker images
+  #         echo "Checking for our specific image:"
+  #         docker images ghcr.io/$REPO_NAME || echo "Image ghcr.io/$REPO_NAME not found!"
+  #
+  #     # Tag the Docker image
+  #     - name: Tag Docker image
+  #       run: |
+  #         if docker images ghcr.io/$REPO_NAME --format "{{.Repository}}" | grep -q ghcr.io/$REPO_NAME; then
+  #           echo "Image found, proceeding with tagging..."
+  #           docker image tag ghcr.io/$REPO_NAME ghcr.io/$REPO_NAME:${{ github.sha }}
+  #         else
+  #           echo "ERROR: Image ghcr.io/$REPO_NAME not found! Build must have failed."
+  #           exit 1
+  #         fi
+  #
+  #     # Login to GHCR
+  #     - name: Log in to GHCR
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GHCR_TOKEN }}
+  #
+  #     # Push Docker images to GHCR
+  #     - name: Push Docker image to GHCR
+  #       run: |
+  #         docker push ghcr.io/$REPO_NAME
+  #         docker push ghcr.io/$REPO_NAME:${{ github.sha }}
+  #
+  #     # Log out from GHCR
+  #     - name: Log out from GHCR
+  #       run: docker logout ghcr.io

@@ -25,6 +25,7 @@ parse:
 html:
   use_repository_button: true
   use_issues_button: false
+  extra_navbar: ""
 
 ############################################################# LaTeX settings ###
 

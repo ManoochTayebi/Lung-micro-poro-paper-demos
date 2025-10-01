@@ -1,0 +1,110 @@
+################################################################################
+###                                                                          ###
+### Created by Mahdi Manoochehrtayebi                                        ###
+###                                                                          ###
+### Jupyter Book Build and Deploy                                            ###
+###                                                                          ###
+### École Polytechnique, Palaiseau, France                                   ###
+###                                                                          ###
+################################################################################
+
+name: Build and Deploy Jupyter Book
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Miniconda
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: 3.10.12  # Match the Python version in environment.yml
+          auto-update-conda: true
+
+      # Debug Conda Environment Setup
+      - name: Debug Conda Environment Setup
+        run: |
+          echo "Conda info:"
+          conda info
+
+          echo "Conda list:"
+          conda list
+
+      # Create Conda environment
+      - name: Create Conda environment
+        run: |
+          conda env create -f .repo2docker/environment.yml
+          
+          # List environments to confirm creation
+          echo "Conda environments:"
+          conda env list
+          
+          # Activate the environment to confirm it works
+          source /usr/share/miniconda/etc/profile.d/conda.sh
+          conda activate notebook
+          
+          echo "Installed packages in the environment:"
+          conda list
+          
+      # Install Jupyter Book & nbconvert
+      - name: Install Jupyter Book & nbconvert
+        run: pip install jupyter-book nbconvert
+
+      # Build Jupyter Book
+      - name: Build Jupyter Book
+        run: jupyter-book build .
+
+      # Copy static files (PDFs, images) to the output directory
+      - name: Copy static files to docs
+        run: |
+          echo "Copying static files..."
+          # Copy PDF files
+          find demos -name "*.pdf" -exec cp {} _build/html/ \;
+          # Copy image files
+          find demos -name "*.png" -exec cp {} _build/html/ \;
+          find demos -name "*.jpg" -exec cp {} _build/html/ \;
+          find demos -name "*.jpeg" -exec cp {} _build/html/ \;
+          find demos -name "*.tif" -exec cp {} _build/html/ \;
+          find demos -name "*.tiff" -exec cp {} _build/html/ \;
+          # List what was copied
+          echo "Static files in _build/html:"
+          ls -la _build/html/*.{pdf,png,jpg,jpeg,tif,tiff} 2>/dev/null || echo "No static files found"
+
+      # Convert Notebooks to HTML
+      - name: Convert Jupyter Notebooks to HTML
+        run: |
+          mkdir -p notebooks_html
+          find demos -name "*.ipynb" ! -name "* copy.ipynb" ! -name "*~" ! -name ".*" -exec jupyter nbconvert --to html --output-dir notebooks_html {} \;
+
+      # Copy everything to docs directory for GitHub Pages
+      - name: Copy build to docs directory
+        run: |
+          echo "Creating docs directory and copying files..."
+          rm -rf docs
+          cp -r _build/html docs
+          # Copy notebooks_html to docs
+          if [ -d "notebooks_html" ]; then
+            cp -r notebooks_html/* docs/
+          fi
+          echo "Contents of docs directory:"
+          ls -la docs/
+
+      # Deploy everything (index.html + notebooks) to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          keep_files: false  # Ensure fresh deployment
