@@ -80,13 +80,11 @@ jobs:
           keep_files: true  # Ensures notebooks & main page are not overwritten
 
   build_docker_image:
-      if: True
-
-      runs-on: ubuntu-latest
-      permissions:
-          contents: read
-          packages: write
-      steps:
+    runs-on: ubuntu-latest
+    permissions:
+        contents: read
+        packages: write
+    steps:
       # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
@@ -138,6 +136,12 @@ jobs:
       # Build the Docker image using repo2docker
       - name: Build Docker image
         run: repo2docker --no-run --user-id 1000 --user-name jovyan --image-name ghcr.io/$REPO_NAME .repo2docker
+        env:
+          DOCKER_BUILDKIT: 0
+
+      # List Docker images after build (for debugging)
+      - name: List Docker images after build
+        run: docker images
 
       # Tag the Docker image
       - name: Tag Docker image
@@ -149,7 +153,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       # Push Docker images to GHCR
       - name: Push Docker image to GHCR
