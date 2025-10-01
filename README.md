@@ -16,6 +16,7 @@ Interactive demos can be found at https://mybinder.org/v2/gh/ManoochTayebi/Lung-
 - [Figure 6](https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/notebooks/Figure6.html)
 - [Figure 7](https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/notebooks/Figure7.html)
 - [Figure 8](https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/notebooks/Figure8.html)
+- [Figure 9](https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/notebooks/Figure9.html)
 - [Figures 10&11](https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/notebooks/Figures10&11.html)
 - [Figure 12](https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/notebooks/Figure12.html)
 
