@@ -1,0 +1,30 @@
+################################################################################
+###                                                                          ###
+### Created by Mahdi Manoochehrtayebi - SIMPLIFIED TEST VERSION              ###
+###                                                                          ###
+### École Polytechnique, Palaiseau, France                                   ###
+###                                                                          ###
+################################################################################
+
+name: notebook
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+# python
+  - python=3.10
+  - numpy
+  - scipy
+  - matplotlib
+
+# jupyter
+  - jupyter
+  - notebook
+
+  - pip
+  - pip:
+    # mechanics stuff
+    - dolfin_mech==2024.10.17
+    - micro_poro_structure_generator==2023.12.8
