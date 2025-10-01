@@ -10,5 +10,5 @@ chapters:
 - file: demos/Figure9
 - file: demos/Figures10&11
 - file: demos/Figure12
-- file: demos/Model_response
-- file: demos/Appendix
+# - file: demos/Model_response
+# - file: demos/Appendix
