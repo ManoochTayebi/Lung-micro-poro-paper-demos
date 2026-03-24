@@ -1,4 +1,4 @@
-# Welcome to [Manoochehrtayebi, Genet & Bel-Brunon, Submitted]'s demos!
+# Welcome to [[Manoochehrtayebi, Genet & Bel-Brunon (2026), Micro-Poro-Mechanical Modeling of the Lung Parenchyma: Theoretical Modeling and Parameters Identification]( https://doi.org/10.1115/1.4070036)]'s demos!
 
 The static notebooks be found at https://manoochtayebi.github.io/Lung-micro-poro-paper-demos/.
 
